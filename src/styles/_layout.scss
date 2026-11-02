@@ -1,0 +1,27 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.header {
+  padding: $space-6 0;
+  border-bottom: 1px solid $color-line;
+
+  .inner {
+    @include flex-between;
+  }
+
+  .logo {
+    font-size: $fs-md;
+    letter-spacing: $ls-wide;
+    @include variable-axes(800, 120);
+  }
+}
+
+.footer {
+  padding: $space-8 0;
+  border-top: 1px solid $color-line;
+
+  .txt {
+    font-size: $fs-sm;
+    color: $color-text-sub;
+  }
+}

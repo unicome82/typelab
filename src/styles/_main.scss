@@ -1,0 +1,19 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.intro {
+  padding: $space-24 0;
+
+  .tit {
+    font-family: $font-display;
+    font-size: $fs-display;
+    line-height: $lh-tight;
+    letter-spacing: $ls-tight;
+    color: $color-accent;
+    @include variable-axes(900, 151);
+  }
+
+  .eyebrow {
+    margin-bottom: $space-4;
+  }
+}

@@ -68,8 +68,8 @@
 - Define design tokens (colors, fonts, spacing, radii) before building UI.
 
 ## Project (fill in)
-- Stack: React + SCSS (default when no other requirement is given)
-- Run:
-- Build / lint / test:
-- Key folders:
-- Notes:
+- Stack: React 19 + Vite 8 + SCSS (sass, `@use` modules)
+- Run: `npm run dev`
+- Build / lint / test: `npm run build` (no lint/test yet)
+- Key folders: `src/` (components by section), `src/styles/` (`index.scss` entry + role partials)
+- Notes: Roboto Flex variable font (wght/wdth/slnt/opsz). Axes driven via CSS vars `--wght`, `--wdth`, `--slnt` (`variable-axes` mixin). Style entry is `index.scss` — `main.scss` would loop with `_main`.
