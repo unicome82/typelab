@@ -277,6 +277,9 @@ body {
     position: relative;
     display: flex;
     flex: none;
+    flex-direction: column;
+    align-items: center;
+    gap: $word-line-gap;
     font-family: $font-display;
     // --fs는 JS가 무대 크기·글자 수로 계산, 계산 전엔 토큰 값으로 대체
     font-size: var(--fs, #{$fs-display});
@@ -284,6 +287,11 @@ body {
     letter-spacing: var(--ls, 0);
     color: $color-text;
     white-space: pre;
+  }
+
+  .line {
+    display: flex;
+    padding-block: var(--line-pad, 0);
   }
 
   .letter {

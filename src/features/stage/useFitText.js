@@ -35,10 +35,14 @@ function useFitText({ stageRef, wordRef, letterRefs, deps, onLayout }) {
       const els = letterRefs.current.filter(Boolean);
       // 프레임 루프가 덮어쓴 축 값이 남아 있으면 기본 굵기 기준 측정이 틀어짐
       els.forEach((el) => ['--lw', '--wght', '--wdth'].forEach((name) => el.style.removeProperty(name)));
+      word.style.removeProperty('--line-pad');
 
       word.style.setProperty('--fs', `${MEASURE_FONT_SIZE}px`);
       const ref = measureBox(word);
       if (!ref.width || !ref.height) return;
+      // 세로 늘림은 글자 높이에만 붙고 줄 간격엔 붙지 않으므로 줄 높이 합을 따로 잼
+      const lineHeights = Array.from(word.children).map((line) => measureBox(line).height);
+      const capSum = lineHeights.reduce((sum, h) => sum + h, 0) || ref.height;
 
       const style = getComputedStyle(stage);
       const availW = stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
@@ -47,12 +51,16 @@ function useFitText({ stageRef, wordRef, letterRefs, deps, onLayout }) {
         (availW * FIT_WIDTH * MEASURE_FONT_SIZE) / ref.width,
         (availH * FIT_HEIGHT * MEASURE_FONT_SIZE) / ref.height
       );
+      const scale = fontSize / MEASURE_FONT_SIZE;
       const fitStretch = Math.min(
-        Math.max((availH * FIT_STRETCH_HEIGHT * MEASURE_FONT_SIZE) / (ref.height * fontSize), 1),
+        Math.max(1 + (availH * FIT_STRETCH_HEIGHT - ref.height * scale) / (capSum * scale), 1),
         MAX_FIT_STRETCH
       );
       word.style.setProperty('--fs', `${fontSize}px`);
       word.style.setProperty('--fit-sy', fitStretch);
+      // 늘어난 글자가 윗줄·아랫줄과 겹치지 않도록 늘어난 만큼 줄 위아래를 벌림
+      const linePad = ((lineHeights[0] ?? 0) * scale * (fitStretch - 1)) / 2;
+      word.style.setProperty('--line-pad', `${linePad}px`);
 
       const widths = els.map((el) => measureBox(el).width);
       els.forEach((el, i) => el.style.setProperty('--lw', `${widths[i]}px`));

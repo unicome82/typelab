@@ -43,6 +43,8 @@ $fs-display: clamp(6rem, 32vw, 40rem);
 
 $lh-tight: 0.9;
 $lh-display: 0.8;
+// 줄마다 대문자 높이만 남기므로 줄 사이는 간격으로 띄움
+$word-line-gap: 0.12em;
 $lh-base: 1.6;
 
 $ls-tight: -0.02em;

@@ -1,7 +1,7 @@
 import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import usePointer from '../../hooks/usePointer.js';
 import useReducedMotion from '../../hooks/useReducedMotion.js';
-import { TEXT_FALLBACK, INTENSITY_BASE } from '../../constants/settings.js';
+import { TEXT_FALLBACK, TEXT_MAX_LINES, INTENSITY_BASE } from '../../constants/settings.js';
 import { AXIS, REST, getEffect } from './effects.js';
 import useFitText from './useFitText.js';
 import Letter from './Letter.jsx';
@@ -17,9 +17,24 @@ const REST_KEYS = Object.keys(REST);
 
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
-function toChars(text) {
+const toChars = (str) => Array.from(str).map((c) => (c === ' ' ? NBSP : c));
+
+// 단어마다 한 줄, 줄 수를 넘는 단어는 마지막 줄에 이어 붙임
+function toLines(text) {
   const display = (text.trim() || TEXT_FALLBACK).toUpperCase();
-  return { display, chars: Array.from(display).map((c) => (c === ' ' ? NBSP : c)) };
+  const words = display.split(/\s+/);
+  const lastStart = TEXT_MAX_LINES - 1;
+  const lines = [...words.slice(0, lastStart), words.slice(lastStart).join(' ')].filter(Boolean);
+  let offset = 0;
+  return {
+    display,
+    lines: lines.map((line) => {
+      const chars = toChars(line);
+      const start = offset;
+      offset += chars.length;
+      return { chars, start };
+    }),
+  };
 }
 
 function writeLetter(el, v, baseWght) {
@@ -36,7 +51,7 @@ function writeLetter(el, v, baseWght) {
 
 function Stage({ settings }) {
   const { text, mode, weight, spacing, intensity } = settings;
-  const { display, chars } = useMemo(() => toChars(text), [text]);
+  const { display, lines } = useMemo(() => toLines(text), [text]);
   const reducedMotion = useReducedMotion();
 
   const stageRef = useRef(null);
@@ -107,14 +122,21 @@ function Stage({ settings }) {
         aria-hidden="true"
         style={{ '--wght': weight, '--ls': `${spacing * SPACING_UNIT_EM}em` }}
       >
-        {chars.map((char, i) => (
-          <Letter
-            key={i}
-            char={char}
-            letterRef={(el) => {
-              letterRefs.current[i] = el;
-            }}
-          />
+        {lines.map((line) => (
+          <span key={line.start} className="line">
+            {line.chars.map((char, ci) => {
+              const i = line.start + ci;
+              return (
+                <Letter
+                  key={i}
+                  char={char}
+                  letterRef={(el) => {
+                    letterRefs.current[i] = el;
+                  }}
+                />
+              );
+            })}
+          </span>
         ))}
       </p>
     </section>

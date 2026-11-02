@@ -6,7 +6,8 @@ export const MODES = [
   { id: 'rotate', label: 'Rotate' },
 ];
 
-export const TEXT_MAX_LENGTH = 10;
+export const TEXT_MAX_LENGTH = 24;
+export const TEXT_MAX_LINES = 3;
 export const TEXT_FALLBACK = 'TYPE';
 
 export const WEIGHT_RANGE = { min: 100, max: 1000, step: 10 };
