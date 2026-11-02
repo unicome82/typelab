@@ -29,8 +29,9 @@ $color-accent: $color-orange;
 $color-surface: rgba($color-white, 0.85);
 
 // ── Fonts
-$font-display: 'Roboto Flex', system-ui, sans-serif;
-$font-body: 'Roboto Flex', system-ui, sans-serif;
+// 라틴은 Roboto Flex, 한글은 글자 단위로 Pretendard로 넘어감
+$font-display: 'Roboto Flex', 'Pretendard Variable', system-ui, sans-serif;
+$font-body: 'Roboto Flex', 'Pretendard Variable', system-ui, sans-serif;
 
 $fs-2xs: 0.625rem;
 $fs-xs: 0.75rem;

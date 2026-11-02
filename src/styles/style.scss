@@ -291,6 +291,8 @@ body {
 
   .line {
     display: flex;
+    // 높이가 다른 한글·라틴이 섞여도 기준선(바닥)을 맞춤
+    align-items: flex-end;
     padding-block: var(--line-pad, 0);
   }
 
@@ -302,6 +304,11 @@ body {
     // 대문자 높이만 남겨 세로 맞춤이 글리프 기준이 되게
     text-box: trim-both cap alphabetic;
     @include variable-axes($axis-wght-display, $axis-wdth-display);
+
+    // 한글은 대문자보다 높으므로 윗선은 글꼴 상단(text)까지 높이로 잡음
+    &.is-hangul {
+      text-box: trim-both text alphabetic;
+    }
   }
 
   .glyph {

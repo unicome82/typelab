@@ -90,6 +90,8 @@ function useFitText({ stageRef, wordRef, letterRefs, deps, onLayout }) {
     let alive = true;
     // 웹폰트가 늦게 오면 대체 글꼴 기준 측정값이 틀어지므로 재측정
     document.fonts?.ready.then(() => alive && fit()).catch(() => {});
+    // 한글 폰트는 쓰인 글자 묶음만 나중에 받으므로 새 묶음이 도착할 때마다 재측정
+    document.fonts?.addEventListener('loadingdone', fit);
 
     const observer = new ResizeObserver(fit);
     observer.observe(stage);
@@ -97,6 +99,7 @@ function useFitText({ stageRef, wordRef, letterRefs, deps, onLayout }) {
     return () => {
       alive = false;
       observer.disconnect();
+      document.fonts?.removeEventListener('loadingdone', fit);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stageRef, wordRef, letterRefs, ...deps]);
