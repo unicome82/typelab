@@ -13,11 +13,11 @@ $color-green: #4cb35a;
 
 // 키는 JS 설정(ACCENTS)의 id와 일치해야 함
 $accents: (
-  orange: $color-orange,
-  yellow: $color-yellow,
-  pink: $color-pink,
-  blue: $color-blue,
-  green: $color-green,
+  'orange': $color-orange,
+  'yellow': $color-yellow,
+  'pink': $color-pink,
+  'blue': $color-blue,
+  'green': $color-green,
 );
 
 $color-bg: $color-paper;
