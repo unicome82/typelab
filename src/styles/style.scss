@@ -195,6 +195,7 @@ body {
   .mode {
     height: $control-height;
     padding: 0 $space-3;
+    font-size: $fs-btn;
     font-weight: 600;
     border: $border-width solid $color-line-mid;
     border-radius: $radius-full;
@@ -266,10 +267,12 @@ body {
     text-align: right;
   }
 
-  // 좁은 화면: 입력칸은 한 줄 전체, 모드 버튼은 그 아래 5칸 균등 분할
   @include tablet {
     width: 100%;
+  }
 
+  // 모바일만 줄바꿈: 입력칸은 한 줄 전체, 모드 버튼은 그 아래 5칸 균등 분할
+  @include mobile {
     .is-head {
       flex-wrap: wrap;
     }

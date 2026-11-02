@@ -36,6 +36,8 @@ $font-body: 'Roboto Flex', 'Pretendard Variable', system-ui, sans-serif;
 $fs-2xs: 0.625rem;
 $fs-xs: 0.75rem;
 $fs-sm: 0.875rem;
+// 버튼 글자: 좁은 화면에선 줄고 최대 14px
+$fs-btn: clamp(#{$fs-2xs}, 2.8vw, #{$fs-sm});
 $fs-md: 1rem;
 $fs-lg: 1.25rem;
 $fs-xl: 2rem;

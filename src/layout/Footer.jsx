@@ -22,7 +22,7 @@ function Footer({ children }) {
           onClick={() => setOpen((prev) => !prev)}
         >
           <span className="material-symbols-outlined" aria-hidden="true">
-            {open ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
+            {open ? 'keyboard_arrow_down' : 'tune'}
           </span>
         </button>
       </div>
