@@ -95,14 +95,43 @@ body {
   z-index: $z-chrome;
   padding: $space-6 0;
 
-  .inner {
+  .panel {
     @include flex-between;
     // 조절 바가 여러 줄이라 안내 문구는 마지막 줄 높이에 맞춤
     align-items: flex-end;
     gap: $space-4;
+    margin-bottom: $space-4;
+
+    // flex가 hidden 속성의 display:none을 덮지 않도록
+    &[hidden] {
+      display: none;
+    }
 
     @include laptop {
       justify-content: flex-end;
+    }
+  }
+
+  .bottom {
+    @include flex-between;
+  }
+
+  .copy {
+    @include text-caps;
+    color: $color-text-sub;
+  }
+
+  .toggle {
+    @include flex-center;
+    width: $control-height;
+    height: $control-height;
+    margin-right: -$space-2;
+    border-radius: $radius-full;
+    cursor: pointer;
+    transition: background $dur-fast $ease-out;
+
+    &:hover {
+      background: $color-line;
     }
   }
 
