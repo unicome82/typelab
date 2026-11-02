@@ -25,6 +25,11 @@ body {
 
 .inner {
   @include container;
+
+  // 헤더·조절 영역은 손가락이 닿는 가장자리에서 더 떨어뜨림
+  @include mobile {
+    padding: 0 $gutter-mobile-chrome;
+  }
 }
 
 .tit-wrap {
@@ -130,7 +135,7 @@ body {
   }
 
   .is-head {
-    gap: $space-2;
+    gap: $space-4;
     margin-bottom: $space-2;
   }
 
@@ -162,6 +167,7 @@ body {
     height: $control-height;
     padding: 0 $space-3;
     font-weight: 600;
+    border: $border-width solid $color-line-mid;
     border-radius: $radius-full;
     cursor: pointer;
     transition: background $dur-fast $ease-out, color $dur-fast $ease-out;
@@ -173,6 +179,7 @@ body {
     &.is-active {
       color: $color-white;
       background: $color-ink;
+      border-color: $color-ink;
     }
   }
 

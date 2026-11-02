@@ -5,6 +5,7 @@ $color-ink-soft: #6b675f;
 $color-white: #fff;
 $color-line: rgba($color-ink, 0.12);
 $color-line-strong: rgba($color-ink, 0.3);
+$color-line-mid: rgba($color-ink, 0.5);
 
 $color-orange: #ff5a1f;
 $color-yellow: #f5c21b;
@@ -74,6 +75,7 @@ $space-24: 6rem;
 $container-max: 1280px;
 $gutter: $space-6;
 $gutter-mobile: $space-4;
+$gutter-mobile-chrome: $gutter-mobile * 2;
 
 // ── Radii
 $radius-sm: 4px;
