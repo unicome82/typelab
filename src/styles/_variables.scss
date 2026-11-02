@@ -1,45 +1,61 @@
-// ── Colors: mid-century palette
-$color-cream: #f3ebdd;
-$color-paper: #fbf7ef;
-$color-charcoal: #2b2724;
-$color-ink-soft: #5c544d;
-$color-orange: #d9622b;
-$color-mustard: #e0a526;
-$color-olive: #6b7b3a;
-$color-teal: #2f6f6b;
-$color-line: rgba($color-charcoal, 0.15);
+// ── Colors
+$color-paper: #f3f0e9;
+$color-ink: #0e0e0e;
+$color-ink-soft: #6b675f;
+$color-white: #fff;
+$color-line: rgba($color-ink, 0.12);
 
-$color-bg: $color-cream;
-$color-surface: $color-paper;
-$color-text: $color-charcoal;
+$color-orange: #ff5a1f;
+$color-yellow: #f5c21b;
+$color-pink: #f28cc4;
+$color-blue: #3f6ee8;
+$color-green: #4cb35a;
+
+// 키는 JS 설정(ACCENTS)의 id와 일치해야 함
+$accents: (
+  orange: $color-orange,
+  yellow: $color-yellow,
+  pink: $color-pink,
+  blue: $color-blue,
+  green: $color-green,
+);
+
+$color-bg: $color-paper;
+$color-text: $color-ink;
 $color-text-sub: $color-ink-soft;
 $color-accent: $color-orange;
+$color-surface: rgba($color-white, 0.85);
 
 // ── Fonts
 $font-display: 'Roboto Flex', system-ui, sans-serif;
 $font-body: 'Roboto Flex', system-ui, sans-serif;
 
+$fs-2xs: 0.625rem;
 $fs-xs: 0.75rem;
 $fs-sm: 0.875rem;
 $fs-md: 1rem;
 $fs-lg: 1.25rem;
 $fs-xl: 2rem;
 $fs-2xl: 3rem;
-$fs-display: clamp(4rem, 18vw, 16rem);
+$fs-display: clamp(6rem, 32vw, 40rem);
 
 $lh-tight: 0.9;
+$lh-display: 0.8;
 $lh-base: 1.6;
 
 $ls-tight: -0.02em;
 $ls-wide: 0.2em;
+$ls-caps: 0.08em;
 
 // ── Variable font axis ranges (Roboto Flex)
 $axis-wght-min: 100;
 $axis-wght-max: 1000;
 $axis-wght-base: 400;
+$axis-wght-display: 900;
 $axis-wdth-min: 25;
 $axis-wdth-max: 151;
 $axis-wdth-base: 100;
+$axis-wdth-display: 25;
 $axis-slnt-min: -10;
 $axis-slnt-max: 0;
 
@@ -68,6 +84,20 @@ $radius-full: 999px;
 $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 $dur-fast: 0.15s;
 $dur-base: 0.3s;
+
+// ── Surfaces
+$shadow-panel: 0 20px 60px rgba($color-ink, 0.12);
+$blur-panel: 16px;
+$blend-accent: multiply;
+$border-width: 1px;
+$control-height: 2.5rem;
+$swatch-size: 1.25rem;
+$panel-width: 20rem;
+
+// ── Layers
+$z-stage: 0;
+$z-chrome: 10;
+$z-panel: 20;
 
 // ── Breakpoints
 $bp-mobile: 640px;

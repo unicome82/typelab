@@ -1,27 +1,64 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
 .header {
+  position: relative;
+  z-index: $z-chrome;
   padding: $space-6 0;
-  border-bottom: 1px solid $color-line;
 
   .inner {
     @include flex-between;
   }
 
   .logo {
-    font-size: $fs-md;
-    letter-spacing: $ls-wide;
-    @include variable-axes(800, 120);
+    font-size: $fs-lg;
+    line-height: 1;
+    letter-spacing: $ls-tight;
+    @include variable-axes($axis-wght-display, $axis-wdth-base);
+  }
+
+  .tagline {
+    @include text-caps;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .icon-btn {
+    display: none;
+
+    @include mobile {
+      display: flex;
+    }
   }
 }
 
-.footer {
-  padding: $space-8 0;
-  border-top: 1px solid $color-line;
+.main {
+  position: relative;
+  z-index: $z-stage;
+  min-height: 0;
+}
 
-  .txt {
-    font-size: $fs-sm;
-    color: $color-text-sub;
+.footer {
+  position: relative;
+  z-index: $z-chrome;
+  padding: $space-6 0;
+
+  .inner {
+    @include flex-between;
+    gap: $space-4;
+  }
+
+  .hint {
+    @include text-caps;
   }
 }

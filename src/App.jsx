@@ -1,29 +1,33 @@
+import { useCallback, useState } from 'react';
+import Header from './layout/Header.jsx';
+import Footer from './layout/Footer.jsx';
+import Stage from './features/stage/Stage.jsx';
+import ControlBar from './features/controls/ControlBar.jsx';
+import Panel from './features/controls/Panel.jsx';
+import { DEFAULT_SETTINGS } from './constants/settings.js';
+
 function App() {
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [panelOpen, setPanelOpen] = useState(false);
+
+  const updateSettings = useCallback((patch) => {
+    setSettings((prev) => ({ ...prev, ...patch }));
+  }, []);
+
+  const togglePanel = useCallback(() => setPanelOpen((open) => !open), []);
+  const closePanel = useCallback(() => setPanelOpen(false), []);
+
   return (
-    <>
-      <header className="header">
-        <div className="inner">
-          <h1 className="logo">TYPE LAB</h1>
-          <span className="material-symbols-outlined">text_fields</span>
-        </div>
-      </header>
-
-      {/* 섹션은 단계 ③~⑥에서 채움 */}
+    <div className="app" data-accent={settings.accent}>
+      <Header panelOpen={panelOpen} onTogglePanel={togglePanel} />
       <main className="main">
-        <section className="intro">
-          <div className="inner">
-            <p className="eyebrow">Kinetic Typography Lab</p>
-            <h2 className="tit">TYPE LAB</h2>
-          </div>
-        </section>
+        <Stage settings={settings} />
       </main>
-
-      <footer className="footer">
-        <div className="inner">
-          <p className="txt">Set in Roboto Flex · Google Fonts</p>
-        </div>
-      </footer>
-    </>
+      <Footer>
+        <ControlBar settings={settings} onChange={updateSettings} panelOpen={panelOpen} onTogglePanel={togglePanel} />
+      </Footer>
+      <Panel open={panelOpen} settings={settings} onChange={updateSettings} onClose={closePanel} />
+    </div>
   );
 }
 

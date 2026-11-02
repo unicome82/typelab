@@ -1,6 +1,19 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+// JS에서 data-accent만 바꾸면 --accent가 따라가도록 CSS 변수로 노출
+:root {
+  @each $name, $color in $accents {
+    --c-#{$name}: #{$color};
+  }
+}
+
+@each $name, $color in $accents {
+  [data-accent='#{$name}'] {
+    --accent: var(--c-#{$name});
+  }
+}
+
 body {
   font-family: $font-body;
   font-size: $fs-md;
@@ -17,11 +30,11 @@ body {
   @include flex-between;
 }
 
-.eyebrow {
-  font-size: $fs-xs;
-  letter-spacing: $ls-wide;
-  text-transform: uppercase;
-  color: $color-text-sub;
+.icon-btn {
+  @include flex-center;
+  width: $control-height;
+  height: $control-height;
+  border-radius: $radius-full;
 }
 
 .material-symbols-outlined {

@@ -30,6 +30,14 @@
   justify-content: space-between;
 }
 
+// 헤더 태그라인·하단 안내·패널 라벨 등 작은 대문자 텍스트
+@mixin text-caps {
+  font-size: $fs-2xs;
+  font-weight: 700;
+  letter-spacing: $ls-caps;
+  text-transform: uppercase;
+}
+
 @mixin container {
   width: 100%;
   max-width: $container-max;

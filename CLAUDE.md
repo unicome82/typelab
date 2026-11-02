@@ -71,5 +71,5 @@
 - Stack: React 19 + Vite 8 + SCSS (sass, `@use` modules)
 - Run: `npm run dev`
 - Build / lint / test: `npm run build` (no lint/test yet)
-- Key folders: `src/` (components by section), `src/styles/` (`index.scss` entry + role partials)
+- Key folders: `src/features/<feature>/` (stage, controls), `src/layout/`, `src/hooks/`, `src/constants/`, `src/styles/` (`index.scss` entry + role partials)
 - Notes: Roboto Flex variable font (wght/wdth/slnt/opsz). Axes driven via CSS vars `--wght`, `--wdth`, `--slnt` (`variable-axes` mixin). Style entry is `index.scss` — `main.scss` would loop with `_main`.
