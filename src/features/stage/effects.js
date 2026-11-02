@@ -11,7 +11,7 @@ export const AXIS = {
   wdthBase: 25,
 };
 
-export const REST = { tx: 0, ty: 0, rot: 0, skew: 0, sx: 1, sy: 1, wght: 0, wdth: 0, gtx: 0, gty: 0, grot: 0 };
+export const REST = { tx: 0, ty: 0, rot: 0, skew: 0, sx: 1, sy: 1, wght: 0, wdth: 0 };
 
 // 반경을 px가 아닌 무대 짧은 변 비율로 둬야 화면 크기와 무관하게 같은 느낌이 남
 const FALLOFF_RADIUS_RATIO = 0.6;
@@ -27,7 +27,7 @@ const MAGNET = { pull: 0.25, wght: 300, wdth: 6, scale: 0.06 };
 const STRETCH = { scaleY: 0.22, wdth: 70, bend: 18, rot: 6 };
 const WAVE = { speed: 2.4, phaseStep: 0.9, pointerPhase: 1, ampBase: 0.08, ampPointer: 0.14, rot: 8, scale: 0.08, wdth: 30 };
 const SCATTER = { push: 0.45, rot: 35, spin: 20 };
-const ROTATE = { ratio: 0.35, boost: 20, ghostRot: 0.45, ghostOffset: 0.18, trail: 6 };
+const ROTATE = { ratio: 0.35, boost: 20 };
 
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 const clamp01 = (v) => clamp(v, 0, 1);
@@ -107,14 +107,7 @@ function rotate(letter, pointer) {
   const dy = pointer.y - letter.cy;
   // 커서가 바로 위일 때 0°가 되도록 기준을 위쪽으로 둠
   const angle = Math.atan2(dx, -dy) * RAD_TO_DEG;
-  const rot = angle * ROTATE.ratio * pointer.energy + Math.sign(dx) * ROTATE.boost * f;
-  const lean = dx / getRadius(pointer);
-  return {
-    rot,
-    grot: rot * ROTATE.ghostRot,
-    gtx: -lean * letter.width * ROTATE.ghostOffset * pointer.energy - pointer.vx * ROTATE.trail,
-    gty: -pointer.vy * ROTATE.trail,
-  };
+  return { rot: angle * ROTATE.ratio * pointer.energy + Math.sign(dx) * ROTATE.boost * f };
 }
 
 export const MODE_EFFECTS = { magnetic, stretch, wave, scatter, rotate };

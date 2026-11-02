@@ -4,6 +4,7 @@ $color-ink: #0e0e0e;
 $color-ink-soft: #6b675f;
 $color-white: #fff;
 $color-line: rgba($color-ink, 0.12);
+$color-line-strong: rgba($color-ink, 0.3);
 
 $color-orange: #ff5a1f;
 $color-yellow: #f5c21b;
@@ -11,7 +12,7 @@ $color-pink: #f28cc4;
 $color-blue: #3f6ee8;
 $color-green: #4cb35a;
 
-// 키는 JS 설정(ACCENTS)의 id와 일치해야 함
+// 키는 JS 설정(DEFAULT_SETTINGS.accent)의 값과 일치해야 함
 $accents: (
   'orange': $color-orange,
   'yellow': $color-yellow,
@@ -86,19 +87,15 @@ $dur-fast: 0.15s;
 $dur-base: 0.3s;
 
 // ── Surfaces
-$shadow-panel: 0 20px 60px rgba($color-ink, 0.12);
-$blur-panel: 16px;
-$blend-accent: multiply;
 $border-width: 1px;
 $control-height: 2.5rem;
-$swatch-size: 1.25rem;
-$panel-width: 20rem;
+$range-width: 6rem;
 
 // ── Layers
 $z-stage: 0;
 $z-chrome: 10;
-$z-panel: 20;
 
 // ── Breakpoints
 $bp-mobile: 640px;
 $bp-tablet: 1024px;
+$bp-laptop: 1280px;

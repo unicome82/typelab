@@ -12,6 +12,12 @@
   }
 }
 
+@mixin laptop {
+  @media (max-width: $bp-laptop) {
+    @content;
+  }
+}
+
 @mixin reduced-motion {
   @media (prefers-reduced-motion: reduce) {
     @content;

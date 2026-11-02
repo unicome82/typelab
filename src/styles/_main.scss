@@ -36,72 +36,16 @@
     @include variable-axes($axis-wght-display, $axis-wdth-display);
   }
 
-  .glyph,
-  .ghost {
+  .glyph {
     display: block;
     will-change: transform;
-  }
-
-  .glyph {
-    position: relative;
     transform: translate(var(--tx, 0), var(--ty, 0)) rotate(var(--rot, 0)) skewX(var(--skew, 0))
       scale(var(--sx, 1), calc(var(--sy, 1) * var(--fit-sy, 1)));
   }
 
-  .ghost {
-    position: absolute;
-    inset: 0;
-    display: none;
-    color: $color-text-sub;
-    transform: translate(var(--gtx, 0), var(--gty, 0)) rotate(var(--grot, 0)) scaleY(var(--fit-sy, 1));
-  }
-
-  .blobs {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  .blob {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--bs, 0);
-    height: var(--bs, 0);
-    border-radius: $radius-full;
-    background: var(--accent);
-    mix-blend-mode: $blend-accent;
-    transform: translate(var(--bx, 0), var(--by, 0)) translate(-50%, -50%) scale(var(--bk, 1));
-    will-change: transform;
-
-    // 레퍼런스의 잎사귀형 조각 — 한 모서리만 각지게
-    &.patch {
-      border-radius: $radius-full $radius-sm $radius-full $radius-full;
-    }
-
-    // 맵 키(orange 등)가 색상값으로 해석되므로 문자열로 바꿔 보간
-    @each $key, $color in $accents {
-      $name: '' + $key;
-
-      &[data-color='#{$name}'] {
-        background: var(--c-#{$name});
-      }
-    }
-  }
-
-  &[data-mode='rotate'] .ghost {
-    display: block;
-  }
-
   @include reduced-motion {
-    .glyph,
-    .ghost,
-    .blob {
+    .glyph {
       will-change: auto;
-    }
-
-    &[data-mode='rotate'] .ghost {
-      display: none;
     }
   }
 }
