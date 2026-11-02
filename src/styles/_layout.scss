@@ -62,3 +62,264 @@
     @include text-caps;
   }
 }
+
+// ── Controls: 하단 바와 설정 패널이 같은 입력 컴포넌트를 공유하므로 공통부만 먼저 선언
+.control-bar,
+.panel {
+  .input {
+    min-width: 0;
+    text-transform: uppercase;
+  }
+
+  .select-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .select {
+    width: 100%;
+    padding-right: $space-6;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .ico {
+    position: absolute;
+    right: 0;
+    font-size: $fs-md;
+    pointer-events: none;
+  }
+}
+
+.control-bar {
+  display: flex;
+  align-items: center;
+  height: $control-height;
+  padding: 0 $space-2 0 $space-4;
+  font-size: $fs-xs;
+  background: $color-surface;
+  border: $border-width solid $color-line;
+  border-radius: $radius-full;
+
+  .input {
+    padding-right: $space-3;
+    font-weight: 700;
+    border-right: $border-width solid $color-line;
+  }
+
+  .select-wrap {
+    padding-left: $space-3;
+  }
+
+  .select {
+    font-weight: 600;
+  }
+
+  .dot {
+    flex-shrink: 0;
+    width: $swatch-size;
+    height: $swatch-size;
+    margin-left: $space-2;
+    background: var(--accent);
+    border-radius: $radius-full;
+    transition: outline-offset $dur-fast $ease-out;
+
+    &[aria-expanded='true'] {
+      outline: $border-width solid var(--accent);
+      outline-offset: $border-width * 2;
+    }
+  }
+
+  @include mobile {
+    height: $space-8;
+    padding: 0 $space-1 0 $space-3;
+    font-size: $fs-2xs;
+
+    .input {
+      padding-right: $space-2;
+    }
+
+    .select-wrap {
+      padding-left: $space-2;
+    }
+
+    .select {
+      padding-right: $space-4;
+    }
+
+    .ico {
+      font-size: $fs-sm;
+    }
+
+    .dot {
+      width: $space-4;
+      height: $space-4;
+      margin-left: $space-1;
+    }
+  }
+}
+
+.panel {
+  // 슬라이더 트랙은 선 하나 굵기 정도로 얇게
+  $track-height: $border-width * 2;
+  $thumb-size: $space-3;
+  $field-height: $space-8;
+
+  position: fixed;
+  // 컨테이너 우측 끝(하단 바 위치)과 정렬
+  right: max(#{$gutter}, calc((100vw - #{$container-max}) / 2 + #{$gutter}));
+  // 푸터(상하 패딩 + 바 높이) 바로 위에 띄움
+  bottom: calc(#{$space-6 * 2} + #{$control-height} + #{$space-2});
+  z-index: $z-panel;
+  display: grid;
+  gap: $space-4;
+  width: $panel-width;
+  padding: $space-4;
+  font-size: $fs-xs;
+  background: $color-surface;
+  border: $border-width solid $color-line;
+  border-radius: $radius-md;
+  box-shadow: $shadow-panel;
+  -webkit-backdrop-filter: blur($blur-panel);
+  backdrop-filter: blur($blur-panel);
+  animation: panel-in $dur-base $ease-out;
+
+  @include reduced-motion {
+    animation: none;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $space-3;
+    align-items: center;
+
+    &.is-stack {
+      grid-template-columns: minmax(0, 1fr);
+      gap: $space-2;
+    }
+  }
+
+  .label {
+    @include text-caps;
+  }
+
+  .input,
+  .select-wrap {
+    height: $field-height;
+    background: $color-white;
+    border: $border-width solid $color-line;
+    border-radius: $radius-sm;
+  }
+
+  .input {
+    width: 100%;
+    padding: 0 $space-3;
+    font-size: $fs-sm;
+    font-weight: 600;
+  }
+
+  .select-wrap {
+    padding-left: $space-3;
+  }
+
+  .select {
+    height: 100%;
+    font-weight: 600;
+  }
+
+  .ico {
+    right: $space-2;
+  }
+
+  .range-wrap {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  .range {
+    flex: 1;
+    min-width: 0;
+    height: $space-4;
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+
+    &::-webkit-slider-runnable-track {
+      height: $track-height;
+      background: linear-gradient(to right, $color-ink var(--fill), $color-line var(--fill));
+      border-radius: $radius-full;
+    }
+
+    &::-moz-range-track {
+      height: $track-height;
+      background: linear-gradient(to right, $color-ink var(--fill), $color-line var(--fill));
+      border-radius: $radius-full;
+    }
+
+    &::-webkit-slider-thumb {
+      width: $thumb-size;
+      height: $thumb-size;
+      // 웹킷은 썸을 트랙 위쪽에 붙이므로 수직 중앙으로 끌어내림
+      margin-top: calc((#{$track-height} - #{$thumb-size}) / 2);
+      background: $color-white;
+      border: $border-width solid $color-ink;
+      border-radius: $radius-full;
+      appearance: none;
+    }
+
+    &::-moz-range-thumb {
+      width: $thumb-size;
+      height: $thumb-size;
+      background: $color-white;
+      border: $border-width solid $color-ink;
+      border-radius: $radius-full;
+    }
+  }
+
+  .value {
+    min-width: $space-8;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .list {
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+  }
+
+  .item {
+    @include flex-center;
+    width: $swatch-size;
+    height: $swatch-size;
+    color: $color-white;
+    background: var(--accent);
+    border-radius: $radius-full;
+
+    &[aria-pressed='true'] {
+      outline: $border-width solid var(--accent);
+      outline-offset: $border-width * 2;
+    }
+
+    .material-symbols-outlined {
+      font-size: $fs-sm;
+    }
+  }
+
+  @include mobile {
+    right: $gutter-mobile;
+    bottom: $gutter-mobile;
+    left: $gutter-mobile;
+    width: auto;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY($space-2);
+  }
+}
