@@ -42,7 +42,9 @@ function useFitText({ stageRef, wordRef, letterRefs, deps, onLayout }) {
       if (!ref.width || !ref.height) return;
       // 세로 늘림은 글자 높이에만 붙고 줄 간격엔 붙지 않으므로 줄 높이 합을 따로 잼
       const lineHeights = Array.from(word.children).map((line) => measureBox(line).height);
-      const capSum = lineHeights.reduce((sum, h) => sum + h, 0) || ref.height;
+      // 한 줄 배치(가로)면 가장 큰 줄 높이만, 줄바꿈 배치(세로)면 줄 높이 합이 늘어남
+      const stacked = getComputedStyle(word).flexDirection === 'column';
+      const capSum = (stacked ? lineHeights.reduce((sum, h) => sum + h, 0) : Math.max(0, ...lineHeights)) || ref.height;
 
       const style = getComputedStyle(stage);
       const availW = stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);

@@ -309,9 +309,14 @@ body {
     position: relative;
     display: flex;
     flex: none;
-    flex-direction: column;
     align-items: center;
-    gap: $word-line-gap;
+    // PC는 한 줄로 이어 쓰고, 세로로 긴 태블릿 이하에서만 단어마다 줄바꿈
+    gap: $word-space;
+
+    @include tablet {
+      flex-direction: column;
+      gap: $word-line-gap;
+    }
     font-family: $font-display;
     // --fs는 JS가 무대 크기·글자 수로 계산, 계산 전엔 토큰 값으로 대체
     font-size: var(--fs, #{$fs-display});
