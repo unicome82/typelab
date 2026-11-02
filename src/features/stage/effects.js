@@ -23,7 +23,7 @@ const MIN_DISTANCE = 1;
 const CENTER = 0.5;
 const PARITY = 2;
 
-const MAGNET = { pull: 0.25, wght: 300, wdth: 6, scale: 0.06 };
+const MAGNET = { pull: 0.25, wght: 300, wdth: 6 };
 const STRETCH = { scaleY: 0.22, wdth: 70, bend: 18, rot: 6 };
 const WAVE = { speed: 2.4, phaseStep: 0.9, pointerPhase: 1, ampBase: 0.08, ampPointer: 0.14, rot: 8, scale: 0.08, wdth: 30 };
 const SCATTER = { push: 0.45, rot: 35, spin: 20 };
@@ -49,8 +49,6 @@ function magnetic(letter, pointer) {
   return {
     tx: (pointer.x - letter.cx) * MAGNET.pull * f,
     ty: (pointer.y - letter.cy) * MAGNET.pull * f,
-    sx: 1 + MAGNET.scale * f,
-    sy: 1 + MAGNET.scale * f,
     wght: MAGNET.wght * f,
     wdth: MAGNET.wdth * f,
   };
