@@ -25,7 +25,7 @@ const PARITY = 2;
 
 const MAGNET = { pull: 0.25, wght: 300, wdth: 6 };
 const STRETCH = { scaleY: 0.22, wdth: 70, bend: 18, rot: 6 };
-const WAVE = { speed: 2.4, phaseStep: 0.9, pointerPhase: 1, ampBase: 0.08, ampPointer: 0.14, rot: 8, scale: 0.08, wdth: 30 };
+const WAVE = { speed: 2.4, phaseStep: 0.9, pointerPhase: 1, ampBase: 0.08, ampPointer: 0.14, rot: 8, scale: 0.08 };
 const SCATTER = { push: 0.45, rot: 35, spin: 20 };
 const ROTATE = { ratio: 0.35, boost: 20 };
 
@@ -76,7 +76,6 @@ function wave(letter, pointer, time) {
     ty: s * amp * letter.height,
     rot: c * WAVE.rot,
     sy: 1 + s * WAVE.scale,
-    wdth: c * WAVE.wdth,
   };
 }
 
@@ -105,7 +104,8 @@ function rotate(letter, pointer) {
   const dy = pointer.y - letter.cy;
   // 커서가 바로 위일 때 0°가 되도록 기준을 위쪽으로 둠
   const angle = Math.atan2(dx, -dy) * RAD_TO_DEG;
-  return { rot: angle * ROTATE.ratio * pointer.energy + Math.sign(dx) * ROTATE.boost * f };
+  // 커서 반경 밖 글자는 제자리에 두고, 가까운 글자만 커서 쪽으로 돌림
+  return { rot: (angle * ROTATE.ratio + Math.sign(dx) * ROTATE.boost) * f };
 }
 
 export const MODE_EFFECTS = { magnetic, stretch, wave, scatter, rotate };
