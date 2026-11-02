@@ -27,7 +27,8 @@ const MAGNET = { pull: 0.25, wght: 300, wdth: 6 };
 const STRETCH = { scaleY: 0.22, wdth: 70, bend: 18, rot: 6 };
 const WAVE = { speed: 2.4, phaseStep: 0.9, pointerPhase: 1, ampBase: 0.08, ampPointer: 0.14, rot: 8, scale: 0.08 };
 const SCATTER = { push: 0.45, rot: 35, spin: 20 };
-const ROTATE = { ratio: 0.35, boost: 20 };
+// radius: 공통 반경 대비 비율 — 바로 근처 글자만 돌도록 좁힘
+const ROTATE = { ratio: 0.35, boost: 20, radius: 0.5 };
 
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 const clamp01 = (v) => clamp(v, 0, 1);
@@ -37,8 +38,8 @@ function getRadius(pointer) {
 }
 
 // 거리 기반 영향도(smoothstep) — 경계가 딱 끊기지 않도록
-function falloff(letter, pointer) {
-  const radius = getRadius(pointer);
+function falloff(letter, pointer, radiusScale = 1) {
+  const radius = getRadius(pointer) * radiusScale;
   const d = Math.hypot(pointer.x - letter.cx, pointer.y - letter.cy);
   const t = clamp01(1 - d / radius);
   return t * t * (SMOOTH_A - SMOOTH_B * t) * pointer.energy;
@@ -99,7 +100,7 @@ function scatter(letter, pointer) {
 }
 
 function rotate(letter, pointer) {
-  const f = falloff(letter, pointer);
+  const f = falloff(letter, pointer, ROTATE.radius);
   const dx = pointer.x - letter.cx;
   const dy = pointer.y - letter.cy;
   // 커서가 바로 위일 때 0°가 되도록 기준을 위쪽으로 둠
