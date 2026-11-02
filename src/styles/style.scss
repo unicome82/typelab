@@ -92,6 +92,8 @@ body {
 
   .inner {
     @include flex-between;
+    // 조절 바가 여러 줄이라 안내 문구는 마지막 줄 높이에 맞춤
+    align-items: flex-end;
     gap: $space-4;
 
     @include laptop {
@@ -102,80 +104,89 @@ body {
   .hint {
     @include text-caps;
 
-    // 한 줄 조절 바가 푸터 폭을 거의 다 쓰므로 좁아지면 안내 문구는 숨김
+    // 조절 바가 푸터 폭을 거의 다 쓰므로 좁아지면 안내 문구는 숨김
     @include laptop {
       display: none;
     }
   }
 }
 
-// ── Controls: 텍스트와 모든 조절 옵션을 한 줄 바에 나열
+// ── Controls: 첫 줄은 텍스트 입력 + 모드 버튼, 아래로 슬라이더를 한 줄씩 쌓음
 .control-bar {
   // 슬라이더 트랙은 선 하나 굵기 정도로 얇게
   $track-height: $border-width * 2;
   $thumb-size: $space-3;
 
   display: flex;
-  align-items: center;
-  height: $control-height;
-  padding: 0 $space-4;
+  flex-direction: column;
+  gap: $space-2;
+  width: $control-width;
   font-size: $fs-xs;
 
   .field {
     display: flex;
     align-items: center;
+    gap: $space-4;
+  }
+
+  .is-head {
     gap: $space-2;
-    height: 100%;
-    padding: 0 $space-4;
-
-    &:first-child {
-      padding-left: 0;
-    }
-
-    &:last-child {
-      padding-right: 0;
-    }
+    margin-bottom: $space-2;
   }
 
   .label {
+    flex: none;
+    width: $control-label-width;
     @include text-caps;
     color: $color-text-sub;
   }
 
+  // 무대 글자를 바꾸는 입력칸임이 바로 보이도록 흰 배경으로 띄움
   .input {
+    flex: 1;
     min-width: 0;
+    height: $control-height;
+    padding: 0 $space-4;
     font-weight: 700;
     text-transform: uppercase;
+    background: $color-white;
+    border-radius: $radius-full;
   }
 
-  .select-wrap {
-    position: relative;
+  .modes {
     display: flex;
-    align-items: center;
+    gap: $space-1;
   }
 
-  .select {
-    padding-right: $space-6;
+  .mode {
+    height: $control-height;
+    padding: 0 $space-3;
     font-weight: 600;
-    appearance: none;
+    border-radius: $radius-full;
     cursor: pointer;
-  }
+    transition: background $dur-fast $ease-out, color $dur-fast $ease-out;
 
-  .ico {
-    position: absolute;
-    right: 0;
-    font-size: $fs-md;
-    pointer-events: none;
+    &:hover {
+      background: $color-line;
+    }
+
+    &.is-active {
+      color: $color-white;
+      background: $color-ink;
+    }
   }
 
   .range-wrap {
     display: flex;
+    flex: 1;
     align-items: center;
     gap: $space-2;
+    min-width: 0;
   }
 
   .range {
-    width: $range-width;
+    flex: 1;
+    min-width: 0;
     height: $space-4;
     background: transparent;
     appearance: none;
@@ -214,56 +225,34 @@ body {
   }
 
   .value {
-    min-width: $space-6;
+    min-width: $space-8;
     font-variant-numeric: tabular-nums;
     text-align: right;
   }
 
-  // 한 줄에 다 들어가지 않는 폭에서는 2열 카드로 접음
+  // 좁은 화면: 입력칸은 한 줄 전체, 모드 버튼은 그 아래 5칸 균등 분할
   @include tablet {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
-    height: auto;
-    padding: $space-2 $space-4;
 
-    .field {
-      justify-content: space-between;
-      height: $control-height;
-      padding: 0;
-
-      &.is-text {
-        grid-column: 1 / -1;
-      }
-    }
-
-    .field:nth-child(odd):not(.is-text) {
-      padding-left: $space-4;
-    }
-
-    .field:nth-child(even) {
-      padding-right: $space-4;
+    .is-head {
+      flex-wrap: wrap;
     }
 
     .input {
-      flex: 1;
-      text-align: right;
+      flex-basis: 100%;
     }
 
-    .range {
-      flex: 1;
-      width: auto;
-      min-width: 0;
+    .modes {
+      display: grid;
+      flex-basis: 100%;
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     }
 
-    .range-wrap {
-      flex: 1;
-      justify-content: flex-end;
-      min-width: 0;
+    .mode {
+      padding: 0;
     }
   }
 }
-
 
 // ── Stage (단계 ③)
 .stage {
