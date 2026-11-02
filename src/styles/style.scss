@@ -1,5 +1,50 @@
 @use 'variables' as *;
 @use 'mixins' as *;
+@use 'reset';
+
+// JS에서 data-accent만 바꾸면 --accent가 따라가도록 CSS 변수로 노출
+:root {
+  @each $name, $color in $accents {
+    --c-#{$name}: #{$color};
+  }
+}
+
+@each $name, $color in $accents {
+  [data-accent='#{$name}'] {
+    --accent: var(--c-#{$name});
+  }
+}
+
+body {
+  font-family: $font-body;
+  font-size: $fs-md;
+  line-height: $lh-base;
+  color: $color-text;
+  background: $color-bg;
+}
+
+.inner {
+  @include container;
+}
+
+.tit-wrap {
+  @include flex-between;
+}
+
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+
+  &.fill {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid $color-accent;
+  outline-offset: 2px;
+}
+
 
 .app {
   display: grid;
@@ -215,6 +260,56 @@
       flex: 1;
       justify-content: flex-end;
       min-width: 0;
+    }
+  }
+}
+
+
+// ── Stage (단계 ③)
+.stage {
+  position: relative;
+  height: 100%;
+  // 글자 폭이 무대 크기를 밀어내면 맞춤 계산이 순환하므로 크기를 부모에서만 받음
+  contain: size;
+  @include container;
+  @include flex-center;
+  // 모바일에서 터치 드래그가 스크롤 대신 포인터 이벤트로 전달되도록
+  touch-action: none;
+  user-select: none;
+
+  .word {
+    position: relative;
+    display: flex;
+    flex: none;
+    font-family: $font-display;
+    // --fs는 JS가 무대 크기·글자 수로 계산, 계산 전엔 토큰 값으로 대체
+    font-size: var(--fs, #{$fs-display});
+    line-height: $lh-display;
+    letter-spacing: var(--ls, 0);
+    color: $color-text;
+    white-space: pre;
+  }
+
+  .letter {
+    position: relative;
+    display: inline-block;
+    width: var(--lw, auto);
+    text-align: center;
+    // 대문자 높이만 남겨 세로 맞춤이 글리프 기준이 되게
+    text-box: trim-both cap alphabetic;
+    @include variable-axes($axis-wght-display, $axis-wdth-display);
+  }
+
+  .glyph {
+    display: block;
+    will-change: transform;
+    transform: translate(var(--tx, 0), var(--ty, 0)) rotate(var(--rot, 0)) skewX(var(--skew, 0))
+      scale(var(--sx, 1), calc(var(--sy, 1) * var(--fit-sy, 1)));
+  }
+
+  @include reduced-motion {
+    .glyph {
+      will-change: auto;
     }
   }
 }
