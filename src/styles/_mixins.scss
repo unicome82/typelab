@@ -18,6 +18,13 @@
   }
 }
 
+// 손가락 입력 기기(폰·태블릿)
+@mixin touch {
+  @media (pointer: coarse) {
+    @content;
+  }
+}
+
 @mixin reduced-motion {
   @media (prefers-reduced-motion: reduce) {
     @content;

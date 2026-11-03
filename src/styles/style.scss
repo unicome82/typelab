@@ -16,6 +16,8 @@
 }
 
 body {
+  // 두 번 탭 확대를 막아 연속 터치가 확대로 오인되지 않게 함
+  touch-action: manipulation;
   font-family: $font-body;
   font-size: $fs-md;
   line-height: $lh-base;
@@ -185,6 +187,11 @@ body {
     text-transform: uppercase;
     background: $color-white;
     border-radius: $radius-full;
+
+    // iOS는 16px 미만 입력칸에 포커스하면 화면을 자동 확대함
+    @include touch {
+      font-size: $fs-md;
+    }
   }
 
   .modes {
