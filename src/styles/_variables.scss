@@ -49,11 +49,12 @@ $lh-display: 0.8;
 // 줄마다 대문자 높이만 남기므로 줄 사이는 간격으로 띄움
 $word-line-gap: 0.12em;
 $word-space: 0.25em;
-// Pretendard 한글은 윗선이 0.82em(Roboto Flex 대문자는 0.72em)이라 커 보임 → 윗선을 대문자 높이에 맞추는 비율
-$hangul-scale: 0.84em;
+// Pretendard 한글은 윗선이 0.82em(Roboto Flex 대문자는 0.72em)이고 글자 면적도 넓어 커 보임
+// → 대문자보다 살짝 낮게(윗선 약 0.67em) 줄여 시각적 크기를 맞춤
+$hangul-scale: 0.78em;
 // 받침이 기준선 아래로 살짝 내려가는 만큼 들어 올림(한글 글자 크기 기준)
-$hangul-lift: 0.04em;
-// 맞춘 한글(0.72em)과 줄인 대문자 박스(0.72 × 0.84 ≈ 0.6em)의 차이 — 줄을 쌓을 때 겹치지 않게 띄움
+$hangul-lift: 0.08em;
+// 줄인 한글 윗선(약 0.67em)과 줄인 대문자 박스(0.72 × 0.78 ≈ 0.56em)의 차이 — 줄을 쌓을 때 겹치지 않게 띄움
 $hangul-overshoot: 0.12em;
 $lh-base: 1.6;
 
