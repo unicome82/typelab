@@ -58,3 +58,6 @@
 - 리렌더: 프레임 갱신은 ref+DOM 직접 쓰기 유지, 푸터 접기는 조절 영역 리렌더 없음, 글자 맞춤은 텍스트·굵기·자간 변경 때만
 - 접근성: Tab 순서(입력→모드 5→슬라이더 3→접기) 정상, focus-visible 링 확인, 대비 본문 16.9:1·보조 문구 4.95:1, 슬라이더 터치 높이 16→24px, aria-pressed/expanded/controls 확인
 - 콘솔: console/debugger 코드 없음, 실행 중 콘솔 메시지·에러 0건
+
+## 배포
+- GitHub Pages: main 푸시 시 Actions로 빌드·배포(.github/workflows/deploy.yml), vite base "./"
