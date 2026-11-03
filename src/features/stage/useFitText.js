@@ -4,10 +4,12 @@ import { useEffect, useLayoutEffect, useRef } from 'react';
 const MEASURE_FONT_SIZE = 100;
 // 무대를 꽉 채우되, 변형(늘이기·흩뿌리기) 여유를 남김
 const FIT_WIDTH = 0.9;
+// 세로로 긴 화면(모바일)은 폭이 좁아 여백을 줄여 글자를 더 크게
+const FIT_WIDTH_PORTRAIT = 0.96;
 const FIT_HEIGHT = 0.82;
 // 세로로 긴 화면(모바일)은 폭에 맞추면 글자가 납작해지므로 세로로 늘려 채움 — 과한 왜곡은 상한으로 막음
 const FIT_STRETCH_HEIGHT = 0.7;
-const MAX_FIT_STRETCH = 1.8;
+const MAX_FIT_STRETCH = 2.2;
 
 function measureBox(el) {
   const { width, height } = el.getBoundingClientRect();
@@ -35,7 +37,8 @@ function useFitText({ stageRef, wordRef, letterRefs, deps, onLayout }) {
       const els = letterRefs.current.filter(Boolean);
       // 프레임 루프가 덮어쓴 축 값이 남아 있으면 기본 굵기 기준 측정이 틀어짐
       els.forEach((el) => ['--lw', '--wght', '--wdth'].forEach((name) => el.style.removeProperty(name)));
-      word.style.removeProperty('--line-pad');
+      // 이전 맞춤의 줄 여백·세로 늘림이 남아 있으면 기준 측정이 커짐
+      ['--line-pad', '--fit-sy'].forEach((name) => word.style.removeProperty(name));
 
       word.style.setProperty('--fs', `${MEASURE_FONT_SIZE}px`);
       const ref = measureBox(word);
@@ -49,8 +52,9 @@ function useFitText({ stageRef, wordRef, letterRefs, deps, onLayout }) {
       const style = getComputedStyle(stage);
       const availW = stage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
       const availH = stage.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+      const fitWidth = availH > availW ? FIT_WIDTH_PORTRAIT : FIT_WIDTH;
       const fontSize = Math.min(
-        (availW * FIT_WIDTH * MEASURE_FONT_SIZE) / ref.width,
+        (availW * fitWidth * MEASURE_FONT_SIZE) / ref.width,
         (availH * FIT_HEIGHT * MEASURE_FONT_SIZE) / ref.height
       );
       const scale = fontSize / MEASURE_FONT_SIZE;

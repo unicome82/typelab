@@ -331,6 +331,15 @@ body {
     // 높이가 다른 한글·라틴이 섞여도 기준선(바닥)을 맞춤
     align-items: flex-end;
     padding-block: var(--line-pad, 0);
+
+    // 한글도 라틴과 같은 대문자 높이 박스를 써야 기준선·세로 늘림 중심이 맞음.
+    // 줄을 쌓을 때만 위·아래로 넘치는 만큼(세로 늘림 배율 포함) 줄 여백을 더함
+    &.has-hangul {
+      @include tablet {
+        margin-top: calc(#{$hangul-overshoot} * var(--fit-sy, 1));
+        margin-bottom: calc(#{$hangul-descent} * var(--fit-sy, 1));
+      }
+    }
   }
 
   .letter {
@@ -341,11 +350,6 @@ body {
     // 대문자 높이만 남겨 세로 맞춤이 글리프 기준이 되게
     text-box: trim-both cap alphabetic;
     @include variable-axes($axis-wght-display, $axis-wdth-display);
-
-    // 한글은 대문자보다 높으므로 윗선은 글꼴 상단(text)까지 높이로 잡음
-    &.is-hangul {
-      text-box: trim-both text alphabetic;
-    }
   }
 
   .glyph {

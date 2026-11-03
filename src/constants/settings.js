@@ -23,7 +23,17 @@ export const INTRO_WORDS = [
   'RETRO', 'MODE', 'PLAY', 'GAME', 'LOOP', 'DREAM', 'HELLO', 'ZEST',
 ];
 
-export const WEIGHT_RANGE = { min: 100, max: 1000, step: 10 };
+// Roboto Flex 가변 축 범위 — 무대 효과의 클램프와 굵기 슬라이더가 함께 씀
+export const FONT_AXES = {
+  wghtMin: 100,
+  wghtMax: 1000,
+  wdthMin: 25,
+  wdthMax: 151,
+  // 무대 글자의 기본 폭(가장 좁게) — SCSS $axis-wdth-display와 일치
+  wdthBase: 25,
+};
+
+export const WEIGHT_RANGE = { min: FONT_AXES.wghtMin, max: FONT_AXES.wghtMax, step: 10 };
 // 자간 단위: 1/100em
 export const SPACING_RANGE = { min: -10, max: 20, step: 1 };
 // 반응 강도(%): 모드 효과의 변형량에 곱해짐, 100이 기본 세기

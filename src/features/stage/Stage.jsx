@@ -1,10 +1,10 @@
 import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import usePointer from '../../hooks/usePointer.js';
 import useReducedMotion from '../../hooks/useReducedMotion.js';
-import { TEXT_FALLBACK, TEXT_MAX_LINES, INTENSITY_BASE } from '../../constants/settings.js';
-import { AXIS, REST, getEffect } from './effects.js';
+import { TEXT_FALLBACK, TEXT_MAX_LINES, INTENSITY_BASE, FONT_AXES as AXIS } from '../../constants/settings.js';
+import { REST, getEffect } from './effects.js';
 import useFitText from './useFitText.js';
-import Letter from './Letter.jsx';
+import Letter, { HANGUL } from './Letter.jsx';
 
 const MS_PER_SECOND = 1000;
 // 자간 설정 단위: 1/100em
@@ -32,7 +32,7 @@ function toLines(text) {
       const chars = toChars(line);
       const start = offset;
       offset += chars.length;
-      return { chars, start };
+      return { chars, start, hangul: HANGUL.test(line) };
     }),
   };
 }
@@ -123,7 +123,7 @@ function Stage({ settings }) {
         style={{ '--wght': weight, '--ls': `${spacing * SPACING_UNIT_EM}em` }}
       >
         {lines.map((line) => (
-          <span key={line.start} className="line">
+          <span key={line.start} className={`line${line.hangul ? ' has-hangul' : ''}`}>
             {line.chars.map((char, ci) => {
               const i = line.start + ci;
               return (
