@@ -30,9 +30,18 @@ function getRadius(pointer) {
 }
 
 // 거리 기반 영향도(smoothstep) — 경계가 딱 끊기지 않도록
+// 세로로 긴 글자는 중심점만 기준으로 재면 위·아래 끝을 눌러도 반응이 없으므로,
+// 글자 세로 중심선(높이에서 폭만큼 뺀 구간)까지의 거리로 잼
+function distanceToLetter(letter, pointer) {
+  const dx = pointer.x - letter.cx;
+  const spine = Math.max(0, letter.height - letter.width) * CENTER;
+  const dy = Math.max(0, Math.abs(pointer.y - letter.cy) - spine);
+  return Math.hypot(dx, dy);
+}
+
 function falloff(letter, pointer) {
   const radius = getRadius(pointer);
-  const d = Math.hypot(pointer.x - letter.cx, pointer.y - letter.cy);
+  const d = distanceToLetter(letter, pointer);
   const t = clamp01(1 - d / radius);
   return t * t * (SMOOTH_A - SMOOTH_B * t) * pointer.energy;
 }

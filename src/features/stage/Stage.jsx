@@ -12,6 +12,9 @@ const SPACING_UNIT_EM = 0.01;
 const NBSP = ' ';
 // 커서 활성도·글자 변형을 각각 한 번 더 보간해 모드 전환과 진입/이탈이 튀지 않게
 const ENERGY_EASE = 0.06;
+// 터치는 짧게 닿았다 떨어지므로 빠르게 켜고, 뗀 뒤엔 여운을 길게 남겨 효과를 볼 시간을 줌
+const ENERGY_RISE_TOUCH = 0.3;
+const ENERGY_FALL_TOUCH = 0.025;
 const OUTPUT_EASE = 0.18;
 // 한 프레임 변화가 이보다 작으면 멈춘 것으로 봄
 const SETTLE_EPS = 0.001;
@@ -101,7 +104,8 @@ function Stage({ settings }) {
       const { mode: currentMode, weight: baseWght, intensity: currentIntensity } = live.current;
       const strength = currentIntensity / INTENSITY_BASE;
       const m = motion.current;
-      const energyStep = ((p.active ? 1 : 0) - m.energy) * ENERGY_EASE;
+      const touchEase = p.active ? ENERGY_RISE_TOUCH : ENERGY_FALL_TOUCH;
+      const energyStep = ((p.active ? 1 : 0) - m.energy) * (p.touch ? touchEase : ENERGY_EASE);
       m.energy += energyStep;
       let moving = Math.abs(energyStep) > SETTLE_EPS;
       // 프레임마다 새 객체를 만들지 않도록 재사용
