@@ -224,7 +224,8 @@ body {
   .range {
     flex: 1;
     min-width: 0;
-    height: $space-4;
+    // 트랙은 얇아도 터치 영역은 최소 24px 확보
+    height: $space-6;
     background: transparent;
     appearance: none;
     cursor: pointer;
@@ -363,14 +364,12 @@ body {
 
   .glyph {
     display: block;
-    will-change: transform;
     transform: translate(var(--tx, 0), var(--ty, 0)) rotate(var(--rot, 0)) skewX(var(--skew, 0))
       scale(var(--sx, 1), calc(var(--sy, 1) * var(--fit-sy, 1)));
   }
 
-  @include reduced-motion {
-    .glyph {
-      will-change: auto;
-    }
+  // 움직이는 동안만 레이어 승격(JS가 is-moving 토글) — 움직임 줄이기 설정에선 루프가 돌지 않아 붙지 않음
+  &.is-moving .glyph {
+    will-change: transform;
   }
 }

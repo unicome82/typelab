@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import usePointer from '../../hooks/usePointer.js';
 import useReducedMotion from '../../hooks/useReducedMotion.js';
 import { TEXT_FALLBACK, TEXT_MAX_LINES, INTENSITY_BASE, FONT_AXES as AXIS, LATIN_WEIGHT } from '../../constants/settings.js';
@@ -13,6 +13,8 @@ const NBSP = ' ';
 // 커서 활성도·글자 변형을 각각 한 번 더 보간해 모드 전환과 진입/이탈이 튀지 않게
 const ENERGY_EASE = 0.06;
 const OUTPUT_EASE = 0.18;
+// 한 프레임 변화가 이보다 작으면 멈춘 것으로 봄
+const SETTLE_EPS = 0.001;
 const REST_KEYS = Object.keys(REST);
 
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
@@ -66,7 +68,7 @@ function Stage({ settings }) {
   const letterRefs = useRef([]);
   // 프레임 루프는 리렌더 없이 돌기 때문에 최신 값을 ref로 읽음
   const live = useRef({ mode, weight, intensity, reducedMotion });
-  const motion = useRef({ energy: 0, values: [], pointer: {} });
+  const motion = useRef({ energy: 0, values: [], pointer: {}, moving: false });
 
   // 레이아웃 효과(맞춤 계산)보다 먼저 갱신돼야 첫 배치에 최신 값이 쓰임
   useLayoutEffect(() => {
@@ -94,12 +96,14 @@ function Stage({ settings }) {
       const layout = layoutRef.current;
       if (live.current.reducedMotion) {
         renderStatic(layout);
-        return;
+        return false;
       }
       const { mode: currentMode, weight: baseWght, intensity: currentIntensity } = live.current;
       const strength = currentIntensity / INTENSITY_BASE;
       const m = motion.current;
-      m.energy += ((p.active ? 1 : 0) - m.energy) * ENERGY_EASE;
+      const energyStep = ((p.active ? 1 : 0) - m.energy) * ENERGY_EASE;
+      m.energy += energyStep;
+      let moving = Math.abs(energyStep) > SETTLE_EPS;
       // 프레임마다 새 객체를 만들지 않도록 재사용
       const pointer = Object.assign(m.pointer, p, { energy: m.energy });
       const effect = getEffect(currentMode);
@@ -111,15 +115,29 @@ function Stage({ settings }) {
         REST_KEYS.forEach((key) => {
           // 강도는 기본 상태(REST)로부터의 변형량에만 곱해 0이면 정지, 200이면 두 배
           const goal = REST[key] + ((target[key] ?? REST[key]) - REST[key]) * strength;
-          v[key] += (goal - v[key]) * OUTPUT_EASE;
+          const step = (goal - v[key]) * OUTPUT_EASE;
+          v[key] += step;
+          if (Math.abs(step) > SETTLE_EPS) moving = true;
         });
         writeLetter(letter, v, baseWght);
       });
+      // 움직이는 동안만 글자를 합성 레이어로 올려, 멈춰 있을 땐 큰 글자 레이어 메모리를 돌려줌
+      if (m.moving !== moving) {
+        stageRef.current?.classList.toggle('is-moving', moving);
+        m.moving = moving;
+      }
+      // false면 usePointer가 루프를 쉼 — 모든 글자가 목표에 닿아 더 그릴 게 없을 때
+      return moving;
     },
     [layoutRef, renderStatic]
   );
 
-  usePointer(stageRef, { onFrame, disabled: reducedMotion });
+  const { wake } = usePointer(stageRef, { onFrame, disabled: reducedMotion });
+
+  // 커서가 멈춰 루프가 쉬는 중에도 설정이 바뀌면 새 값으로 다시 그림
+  useEffect(() => {
+    wake();
+  }, [wake, display, mode, weight, spacing, intensity]);
 
   return (
     <section ref={stageRef} className="stage" aria-label={display}>
