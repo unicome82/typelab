@@ -1,7 +1,7 @@
 import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import usePointer from '../../hooks/usePointer.js';
 import useReducedMotion from '../../hooks/useReducedMotion.js';
-import { TEXT_FALLBACK, TEXT_MAX_LINES, INTENSITY_BASE, FONT_AXES as AXIS } from '../../constants/settings.js';
+import { TEXT_FALLBACK, TEXT_MAX_LINES, INTENSITY_BASE, FONT_AXES as AXIS, LATIN_WEIGHT } from '../../constants/settings.js';
 import { REST, getEffect } from './effects.js';
 import useFitText from './useFitText.js';
 import Letter, { HANGUL } from './Letter.jsx';
@@ -37,7 +37,13 @@ function toLines(text) {
   };
 }
 
-function writeLetter(el, v, baseWght) {
+// 슬라이더 굵기(축 전체 범위)를 영문 전용 범위로 비례 변환
+function toLatinWeight(wght) {
+  const t = (wght - AXIS.wghtMin) / (AXIS.wghtMax - AXIS.wghtMin);
+  return LATIN_WEIGHT.min + t * (LATIN_WEIGHT.max - LATIN_WEIGHT.min);
+}
+
+function writeLetter({ el, hangul }, v, baseWght) {
   const s = el.style;
   s.setProperty('--tx', `${v.tx}px`);
   s.setProperty('--ty', `${v.ty}px`);
@@ -45,7 +51,8 @@ function writeLetter(el, v, baseWght) {
   s.setProperty('--skew', `${v.skew}deg`);
   s.setProperty('--sx', v.sx);
   s.setProperty('--sy', v.sy);
-  s.setProperty('--wght', clamp(baseWght + v.wght, AXIS.wghtMin, AXIS.wghtMax));
+  const wght = clamp(baseWght + v.wght, AXIS.wghtMin, AXIS.wghtMax);
+  s.setProperty('--wght', hangul ? wght : toLatinWeight(wght));
   s.setProperty('--wdth', clamp(AXIS.wdthBase + v.wdth, AXIS.wdthMin, AXIS.wdthMax));
 }
 
@@ -69,7 +76,7 @@ function Stage({ settings }) {
   const renderStatic = useCallback((layout) => {
     const { weight: baseWght } = live.current;
     motion.current.values = layout.letters.map(() => ({ ...REST }));
-    layout.letters.forEach((l) => writeLetter(l.el, REST, baseWght));
+    layout.letters.forEach((l) => writeLetter(l, REST, baseWght));
   }, []);
 
   const layoutRef = useFitText({
@@ -106,7 +113,7 @@ function Stage({ settings }) {
           const goal = REST[key] + ((target[key] ?? REST[key]) - REST[key]) * strength;
           v[key] += (goal - v[key]) * OUTPUT_EASE;
         });
-        writeLetter(letter.el, v, baseWght);
+        writeLetter(letter, v, baseWght);
       });
     },
     [layoutRef, renderStatic]
@@ -120,7 +127,7 @@ function Stage({ settings }) {
         ref={wordRef}
         className="word"
         aria-hidden="true"
-        style={{ '--wght': weight, '--ls': `${spacing * SPACING_UNIT_EM}em` }}
+        style={{ '--wght': toLatinWeight(weight), '--wght-ko': weight, '--ls': `${spacing * SPACING_UNIT_EM}em` }}
       >
         {lines.map((line) => (
           <span key={line.start} className={`line${line.hangul ? ' has-hangul' : ''}`}>

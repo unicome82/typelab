@@ -78,6 +78,7 @@ function useFitText({ stageRef, wordRef, letterRefs, deps, onLayout }) {
         return {
           el,
           index,
+          hangul: el.classList.contains('is-hangul'),
           count: els.length,
           cx: r.left - stageRect.left + r.width / 2,
           cy: r.top - stageRect.top + r.height / 2,

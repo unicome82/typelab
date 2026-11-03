@@ -33,6 +33,10 @@ export const FONT_AXES = {
   wdthBase: 25,
 };
 
+// 영문(Roboto Flex)은 같은 굵기 값에서 한글(Pretendard)보다 양 끝이 더 가늘고 더 굵어 보이므로,
+// 슬라이더 범위(100~1000)를 이 범위로 눌러 담아 한글과 굵기 인상을 맞춤. 한글은 슬라이더 값 그대로
+export const LATIN_WEIGHT = { min: 200, max: 800 };
+
 export const WEIGHT_RANGE = { min: FONT_AXES.wghtMin, max: FONT_AXES.wghtMax, step: 10 };
 // 자간 단위: 1/100em
 export const SPACING_RANGE = { min: -10, max: 20, step: 1 };
